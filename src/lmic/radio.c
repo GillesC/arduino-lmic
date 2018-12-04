@@ -405,9 +405,10 @@ static void configPower () {
     } else if(pw < 2) {
         pw = 2;
     }
-    // check board type for BOOST pin
-    writeReg(RegPaConfig, (u1_t)(0x80|(pw&0xf)));
-    writeReg(RegPaDac, readReg(RegPaDac)|0x4);
+    //  PaSelect to 0x00 (applying mask and 0111 1111 == 0x7F)
+    // set MaxPower to 0x07 -> Pmax = 15 (shited is 0x70)
+    // set OutPutPower to pw
+    writeReg(RegPaConfig, (u1_t)( (0x70 | (pw&0xf)) & (0x7f));
 
 #elif CFG_sx1272_radio
     // set PA config (2-17 dBm using PA_BOOST)
